@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.AddTaskActivity">
+
+    <RadioGroup
+        android:id="@+id/priority_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:contextClickable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_input">
+
+        <RadioButton
+            android:id="@+id/low_priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#dbdbdb"
+            android:text="Low priority"
+            android:textColor="#41ff17" />
+
+        <RadioButton
+            android:id="@+id/medium_priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medium priority"
+            android:textColor="#fff700" />
+
+        <RadioButton
+            android:id="@+id/high_priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="High priority"
+            android:textColor="#ff0000" />
+    </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/task_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:hint="New task..."
+        android:minHeight="48dp"
+        android:maxLength="50"
+        android:textSize="36sp"
+        android:background="@android:color/transparent"
+        android:maxLines="3"
+        app:counterEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/task_delete_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:width="70dp"
+        android:height="85dp"
+        android:textSize="12sp"
+        android:textColor="@color/red"
+        android:background="@drawable/ic_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

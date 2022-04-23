@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/notesFragment">
+
+    <fragment
+        android:id="@+id/notesFragment"
+        android:name="com.example.mysimplenotes.fragments.NotesFragment"
+        android:label="fragment_notes"
+        tools:layout="@layout/fragment_notes" >
+        <action
+            android:id="@+id/action_notesFragment_to_addNoteActivity"
+            app:destination="@id/addNoteActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.example.mysimplenotes.fragments.TasksFragment"
+        android:label="fragment_tasks"
+        tools:layout="@layout/fragment_tasks" >
+        <action
+            android:id="@+id/action_tasksFragment_to_addTaskActivity"
+            app:destination="@id/addTaskActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/addNoteActivity"
+        android:name="com.example.mysimplenotes.activities.AddNoteActivity"
+        android:label="activity_add_note"
+        tools:layout="@layout/activity_add_note" />
+    <activity
+        android:id="@+id/addTaskActivity"
+        android:name="com.example.mysimplenotes.activities.AddTaskActivity"
+        android:label="activity_add_task"
+        tools:layout="@layout/activity_add_task" />
+</navigation>
