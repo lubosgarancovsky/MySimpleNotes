@@ -14,8 +14,6 @@ import com.example.mysimplenotes.dataclass.Task
  * Adapter pre recycklerView poznamok
  * @param mList zoznam uloh
  * @param listener OnItemClickLister
- *
- * zdroj kodu triedy: https://www.geeksforgeeks.org/android-recyclerview-in-kotlin/
  */
 class TasksAdapter(private val mList: List<Task>, private val listener : OnItemClickListener) : RecyclerView.Adapter<TasksAdapter.ViewHolder>() {
 

@@ -13,8 +13,6 @@ import com.example.mysimplenotes.R
  * Adapter pre recycklerView poznamok
  * @param mList zoznam poznamok
  * @param listener OnItemClickLister
- *
- * zdroj kodu triedy: https://www.geeksforgeeks.org/android-recyclerview-in-kotlin/
  */
 class NotesAdapter(private val mList : List<Note>, private val listener : OnItemClickListener) : RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 

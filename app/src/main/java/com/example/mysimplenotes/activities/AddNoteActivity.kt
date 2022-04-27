@@ -15,7 +15,7 @@ import com.example.mysimplenotes.R
 
 class AddNoteActivity : AppCompatActivity() {
 
-    //globalny atribut, ktory rozhoduje ci sa jedna o novu poznamku alebo exitujuci poznamku
+    //atribut, ktory rozhoduje ci sa jedna o novu poznamku alebo exitujuci poznamku
     private var isNew : Boolean = true
 
     //atributy existujucej poznamky
@@ -71,53 +71,81 @@ class AddNoteActivity : AppCompatActivity() {
         val heading = findViewById<EditText>(R.id.note_heading)
         val text = findViewById<EditText>(R.id.note_text)
 
-        //Nadpis poznamky nesmie byt prazdny
-        if (heading.text.toString().isNotEmpty()) {
-            //ak pouzivatel vytvara novu poznamku
-            if (isNew) {
+        if (isNew) {
+            addNote(db, heading, text)
+        }
+        else {
+            updateNote(db, noteHeading, noteText, noteTime, heading, text)
+        }
+    }
 
-                //vytvori sa nova poznamka
-                val note = Note(heading.text.toString(), text.text.toString(), Utils.getDate())
+    /**
+     * Sukromna metoda na pridavanie novej poznamky
+     * */
+    private fun addNote(db : DatabaseHandler, heading : EditText, text : EditText) {
+        var note : Note
+        var result : Long = -1
 
-                //vracia -1 ak sa nepodarilo vykonat insert query
-                val result : Long = db.insertNote(note)
-
-                //ak sa nepdarilo vykonat insert query, nepohne sa na predchadzajucu aktivitu
-                if (result == (-1).toLong()){
-                    Toast.makeText(this, "Note couldn't be created", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show()
-                    //ak bola poznamka pridana, moze sa pohnut na predchadzajucu aktivitu (finnish zavola onDestroy aktivity)
-                    finish()
-                }
-
-            //ak sa upravuje existujuca poznamka
-            } else {
-                //nova poznamka
-                val note = Note(heading.text.toString(), text.text.toString(), Utils.getDate())
-
-                //poznamka sa updatuje iba ak bola zmenena
-                //tj. stare udaje sa nerovnaju novym
-                if (note.heading != noteHeading || note.text != noteText) {
-                    //vracia pocet aktualizovanych zaznamov v DB
-                    val result = db.updateNote(noteHeading.toString(), noteText.toString(), noteTime.toString(), note)
-
-                    //kotrluje pocet updatovanych zaznamov
-                    if(result > 0) {
-                        //update query presiel a poznamka sa aktualizovala, dostava sa na predchadzajuci aktivitu
-                        Toast.makeText(this, "Note updated", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                    else {
-                        //update query nepresiel,ostava sa na aktivite
-                        Toast.makeText(this, "Note not updated", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
+        // ak nazov aj text su prazdne, odide sa z aktivity
+        if (heading.text.isEmpty() && text.text.isEmpty()) {
             finish()
-        } else {
-            //ak je pole pre nazov poznamky prazdne, iba sa vyvola toast message
-            Toast.makeText(this, "Header cant be empty", Toast.LENGTH_SHORT).show()
+        }
+
+        //ak nazov poznamky je prazdny, ale text nie, text sa pouzije ako nadpis
+        if (heading.text.isEmpty() && text.text.isNotEmpty()) {
+            note = Note(text.text.toString(), text.text.toString(), Utils.getDate())
+            result = db.insertNote(note)
+        }
+
+        // ak nazov poznamke nie je prazdy ale text je prazdny, prida sa poznamka bez textu
+        // ak nazov ani text poznamky nie su prazdne, prid sa normalna poznamka
+        if (heading.text.isNotEmpty()) {
+            if (text.text.isNotEmpty()) {
+                note = Note(heading.text.toString(), text.text.toString(), Utils.getDate())
+                result = db.insertNote(note)
+            } else {
+                note = Note(heading.text.toString(), "", Utils.getDate())
+                result = db.insertNote(note)
+            }
+        }
+
+        // kontroluje, ci sa poznamka pridala, ak ano, odide z aktivity
+        if (result == (-1).toLong()) {
+            Toast.makeText(this, "Note couldn't be created", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+
+    private fun updateNote(db : DatabaseHandler, oldHeading : CharSequence, oldText : CharSequence, oldTime : CharSequence, newHeading : EditText, newText:EditText ) {
+        var note : Note
+        var result: Int
+
+        // ak nazov aj text su prazdne, stara poznamka sa vymaze
+        if (newHeading.text.isEmpty() && newText.text.isEmpty()) {
+            db.deleteNote(oldHeading, oldText, oldTime)
+            finish()
+            result = -1
+        }
+        //ak nazov poznamky je prazdny, ale text nie, text sa pouzije ako nadpis
+        else if (newHeading.text.isEmpty() && newText.text.isNotEmpty()) {
+            note = Note(newText.text.toString(), newText.text.toString(), Utils.getDate())
+            result = db.updateNote(oldHeading.toString(), oldText.toString(), oldTime.toString(), note)
+        }
+        else {
+            note = Note(newHeading.text.toString(), newText.text.toString(), Utils.getDate())
+            result = db.updateNote(oldHeading.toString(), oldText.toString(), oldTime.toString(), note)
+        }
+
+        // kontroluje, ci sa poznamka aktualizovala alebo vymazala, ak ano, odide z aktivity
+        when (result) {
+            -1  -> Toast.makeText(this, "Note was deleted", Toast.LENGTH_SHORT).show()
+             0 -> Toast.makeText(this, "Note couldn't be updated", Toast.LENGTH_SHORT).show()
+            else -> {
+                Toast.makeText(this, "Note updated", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
     }
 
