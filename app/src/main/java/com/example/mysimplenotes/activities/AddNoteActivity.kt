@@ -83,60 +83,45 @@ class AddNoteActivity : AppCompatActivity() {
      * Sukromna metoda na pridavanie novej poznamky
      * */
     private fun addNote(db : DatabaseHandler, heading : EditText, text : EditText) {
-        var note : Note
-        var result : Long = -1
+        var note : Note = Note(heading.text.toString(), text.text.toString(), Utils.getDate())
 
         // ak nazov aj text su prazdne, odide sa z aktivity
-        if (heading.text.isEmpty() && text.text.isEmpty()) {
+        var result = if (heading.text.isEmpty() && text.text.isEmpty()) {
             finish()
+            -2
+
+        } else {
+            db.insertNote(note)
         }
 
-        //ak nazov poznamky je prazdny, ale text nie, text sa pouzije ako nadpis
-        if (heading.text.isEmpty() && text.text.isNotEmpty()) {
-            note = Note(text.text.toString(), text.text.toString(), Utils.getDate())
-            result = db.insertNote(note)
-        }
-
-        // ak nazov poznamke nie je prazdy ale text je prazdny, prida sa poznamka bez textu
-        // ak nazov ani text poznamky nie su prazdne, prid sa normalna poznamka
-        if (heading.text.isNotEmpty()) {
-            if (text.text.isNotEmpty()) {
-                note = Note(heading.text.toString(), text.text.toString(), Utils.getDate())
-                result = db.insertNote(note)
-            } else {
-                note = Note(heading.text.toString(), "", Utils.getDate())
-                result = db.insertNote(note)
-            }
-        }
 
         // kontroluje, ci sa poznamka pridala, ak ano, odide z aktivity
-        if (result == (-1).toLong()) {
-            Toast.makeText(this, "Note couldn't be created", Toast.LENGTH_SHORT).show()
-        }else{
-            Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show()
-            finish()
+        when (result) {
+            (-1).toLong() -> {Toast.makeText(this, "Note couldn't be created", Toast.LENGTH_SHORT).show()}
+            (-2).toLong() -> {finish()}
+            else -> {
+                Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
     }
-
+    /**
+     * Sukromna metoda na aktualizovanie poznamky
+     * */
     private fun updateNote(db : DatabaseHandler, oldHeading : CharSequence, oldText : CharSequence, oldTime : CharSequence, newHeading : EditText, newText:EditText ) {
-        var note : Note
-        var result: Int
+
+        val note : Note = Note(newHeading.text.toString(), newText.text.toString(), Utils.getDate())
 
         // ak nazov aj text su prazdne, stara poznamka sa vymaze
-        if (newHeading.text.isEmpty() && newText.text.isEmpty()) {
+        val result: Int = if (newHeading.text.isEmpty() && newText.text.isEmpty()) {
             db.deleteNote(oldHeading, oldText, oldTime)
             finish()
-            result = -1
+            -1
+        } else {
+            db.updateNote(oldHeading.toString(), oldText.toString(), oldTime.toString(), note)
         }
-        //ak nazov poznamky je prazdny, ale text nie, text sa pouzije ako nadpis
-        else if (newHeading.text.isEmpty() && newText.text.isNotEmpty()) {
-            note = Note(newText.text.toString(), newText.text.toString(), Utils.getDate())
-            result = db.updateNote(oldHeading.toString(), oldText.toString(), oldTime.toString(), note)
-        }
-        else {
-            note = Note(newHeading.text.toString(), newText.text.toString(), Utils.getDate())
-            result = db.updateNote(oldHeading.toString(), oldText.toString(), oldTime.toString(), note)
-        }
+
+
 
         // kontroluje, ci sa poznamka aktualizovala alebo vymazala, ak ano, odide z aktivity
         when (result) {

@@ -37,6 +37,10 @@ class NotesAdapter(private val mList : List<Note>, private val listener : OnItem
         holder.noteHeading.text = itemsViewModel.heading
         holder.noteText.text = itemsViewModel.text
         holder.noteTime.text = itemsViewModel.date
+
+        if (holder.noteHeading.text.isEmpty()) {
+            holder.noteHeading.text = itemsViewModel.text
+        }
     }
 
     /**
