@@ -22,21 +22,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#dbdbdb"
-            android:text="Low priority"
+            android:text="@string/low_priority"
             android:textColor="#41ff17" />
 
         <RadioButton
             android:id="@+id/medium_priority"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Medium priority"
+            android:text="@string/medium_priority"
             android:textColor="#fff700" />
 
         <RadioButton
             android:id="@+id/high_priority"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="High priority"
+            android:text="@string/high_priority"
             android:textColor="#ff0000" />
     </RadioGroup>
 
@@ -47,7 +47,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:hint="New task..."
+        android:hint="@string/new_task"
         android:minHeight="48dp"
         android:maxLength="50"
         android:textSize="36sp"

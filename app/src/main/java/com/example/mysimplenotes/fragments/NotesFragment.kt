@@ -46,7 +46,7 @@ class NotesFragment : Fragment(), OnItemClickListener {
 
 
         //listener pre addNoteButton tlacidlo otvori "AddNoteActivity" aktivitu
-        addNoteButton.setOnClickListener() {
+        addNoteButton.setOnClickListener {
             addNoteActivity.putExtra("newNote", true)
             startActivity(addNoteActivity)
         }

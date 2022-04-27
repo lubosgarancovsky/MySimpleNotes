@@ -21,7 +21,8 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/note_heading" />
+        app:layout_constraintTop_toBottomOf="@+id/note_heading"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/note_heading"
@@ -32,14 +33,15 @@
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
         android:ems="10"
-        android:hint="Title..."
+        android:hint="@string/title"
         android:inputType="text"
         android:maxLength="20"
         android:minHeight="48dp"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:importantForAutofill="no" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/note_delete_btn"

@@ -22,7 +22,7 @@ import com.example.mysimplenotes.dataclass.Task
 class TasksFragment : Fragment(), OnItemClickListener {
 
     //ArrayList uloh
-    var tasksList : ArrayList<Task> = ArrayList()
+    private var tasksList : ArrayList<Task> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +46,7 @@ class TasksFragment : Fragment(), OnItemClickListener {
         val addTaskActivity = Intent(activity, AddTaskActivity::class.java)
 
         //listener pre tlacidlo ktore otvori oktivitu na pridanei novej ulohy
-        addTaskButton.setOnClickListener() {
+        addTaskButton.setOnClickListener {
             startActivity(addTaskActivity)
         }
 

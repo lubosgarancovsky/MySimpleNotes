@@ -38,6 +38,7 @@ class NotesAdapter(private val mList : List<Note>, private val listener : OnItem
         holder.noteText.text = itemsViewModel.text
         holder.noteTime.text = itemsViewModel.date
 
+        // ak poznamka nema nazov, ako nazov sa pouzije text poznamky
         if (holder.noteHeading.text.isEmpty()) {
             holder.noteHeading.text = itemsViewModel.text
         }

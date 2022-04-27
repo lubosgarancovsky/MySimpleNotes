@@ -62,7 +62,6 @@ class AddNoteActivity : AppCompatActivity() {
 
     /**
      * Metoda zaistuje ze po stlaceni tlacidla spat na telefone sa bud vytvori alebo upravi poznamka
-     * Ak pole s nadpisom poznamky je prazdne, z aktivity sa neodchadza a vypise sa toast message
      */
     override fun onBackPressed() {
         val db = DatabaseHandler(this)
@@ -81,12 +80,15 @@ class AddNoteActivity : AppCompatActivity() {
 
     /**
      * Sukromna metoda na pridavanie novej poznamky
+     * @param db DatabaseHandler
+     * @param heading EditText s nazvom poznamky
+     * @param text EditText s textom poznamky
      * */
     private fun addNote(db : DatabaseHandler, heading : EditText, text : EditText) {
-        var note : Note = Note(heading.text.toString(), text.text.toString(), Utils.getDate())
+        val note = Note(heading.text.toString(), text.text.toString(), Utils.getDate())
 
         // ak nazov aj text su prazdne, odide sa z aktivity
-        var result = if (heading.text.isEmpty() && text.text.isEmpty()) {
+        val result = if (heading.text.isEmpty() && text.text.isEmpty()) {
             finish()
             -2
 
@@ -105,12 +107,19 @@ class AddNoteActivity : AppCompatActivity() {
             }
         }
     }
+
     /**
      * Sukromna metoda na aktualizovanie poznamky
+     * @param db DatabaseHandler
+     * @param oldHeading nazov starej poznamky
+     * @param oldText text starej poznamky
+     * @param oldTime datum starej poznamky
+     * @param newHeading EdiText s novym nazvom poznamky
+     * @param newText EditText s novym textom poznamky
      * */
     private fun updateNote(db : DatabaseHandler, oldHeading : CharSequence, oldText : CharSequence, oldTime : CharSequence, newHeading : EditText, newText:EditText ) {
 
-        val note : Note = Note(newHeading.text.toString(), newText.text.toString(), Utils.getDate())
+        val note = Note(newHeading.text.toString(), newText.text.toString(), Utils.getDate())
 
         // ak nazov aj text su prazdne, stara poznamka sa vymaze
         val result: Int = if (newHeading.text.isEmpty() && newText.text.isEmpty()) {
@@ -120,8 +129,6 @@ class AddNoteActivity : AppCompatActivity() {
         } else {
             db.updateNote(oldHeading.toString(), oldText.toString(), oldTime.toString(), note)
         }
-
-
 
         // kontroluje, ci sa poznamka aktualizovala alebo vymazala, ak ano, odide z aktivity
         when (result) {
@@ -137,7 +144,7 @@ class AddNoteActivity : AppCompatActivity() {
 
 
     /**
-     * Metoda zmaze poznamku, po kliknuti na tlacidlo zmazat
+     * Metoda zmaze aktualne otvorenu poznamku, po kliknuti na tlacidlo zmazat
      */
     private fun tryDeleteNote() {
         //posiela DB handleru spravu na zmazanie poznamky

@@ -23,13 +23,14 @@
             android:ellipsize="end"
             android:gravity="left"
             android:maxLines="1"
-            android:text="Recycler item note"
+            android:text="@string/recycler_item_note"
             android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/note_item_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/note_item_time"
@@ -38,8 +39,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="top"
-            android:text="10-4-2022 12:41:36"
-            android:textSize="10sp"
+            android:text="@string/date_dummy"
+            android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +53,7 @@
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Note text"
+            android:text="@string/note_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

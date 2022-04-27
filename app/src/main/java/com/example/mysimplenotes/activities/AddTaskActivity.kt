@@ -63,7 +63,7 @@ class AddTaskActivity : AppCompatActivity() {
 
 
         //delete tlacidlo vola metodu na zmazanie ulohy
-        deleteBtn.setOnClickListener() {
+        deleteBtn.setOnClickListener {
             tryDeleteTask()
         }
     }
@@ -75,60 +75,82 @@ class AddTaskActivity : AppCompatActivity() {
         // handler databazy
         val db = DatabaseHandler(this)
 
-        // pole pre text ulohy
-        val taskTextInput : TextInputEditText= findViewById(R.id.task_input)
+        // textovy vstup pre text ulohy
+        val taskTextInput : TextInputEditText = findViewById(R.id.task_input)
 
-        // text ulohy nesmie byt prazdny
-        if (taskTextInput.text.toString().isNotEmpty() && getPriority() != -1) {
-
-            // ak sa jedna o novu poznamku
-            if(isNew) {
-                // v resulte je vysledok insert query (rowId ak sa insert podaril, -1 ak sa nepodaril)
-                val result = db.insertTask(Task(taskTextInput.text.toString(), getPriority(), Utils.getDate()))
-
-                // vypise sa vysledok insert query ako toas message
-                if (result == (-1).toLong()) {
-                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+        // ak su polia prazdne, odide sa z aktivity a uloha sa neprida
+        if (taskTextInput.text.toString().isEmpty() && getPriority() == -1) {
+            finish()
+        } else {
+            // uloha sa prida iba ak je vyplneny nazov aj priorita
+            if (taskTextInput.text.toString().isNotEmpty() && getPriority() != -1) {
+                if(isNew) {
+                    addTask(db, taskTextInput, getPriority())
+                    // ak sa upravuje/maze stara poznamka
                 } else {
-                    Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show()
-                    //ukonci aktivitu
-                    finish()
+                    updateTask(db, taskTextInput, getPriority())
                 }
-
-            // ak sa upravuje/maze stara poznamka
             } else {
+                //este neboli vyplnene vsetky polia
+                Toast.makeText(this, "Fill in all fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-                // instancia novez poznamky, ziskava text z pola pre text na aktivite, prioritu zo zakliknuteho radiobuttonua stary datum
-                // stary datum preto, lebo pri upravovani ulohy nechcem menit jej datum upravy tak ako pri poznamke
-                val newTask = Task(taskTextInput.text.toString(), getPriority(), date.toString())
+    /**
+     * Sukromna metoda pre pridavanie ulohy
+     * @param db DatabaseHandler
+     * @param taskTextInput EditText s textom ulohy
+     * @param priority piorita poznamky
+     * */
+    private fun addTask(db : DatabaseHandler,taskTextInput : EditText, priority : Int) {
+        // v resulte je vysledok insert query (rowId ak sa insert podaril, -1 ak sa nepodaril)
+        val result = db.insertTask(Task(taskTextInput.text.toString(), priority, Utils.getDate()))
 
-                //ak sa text/priorita/datum ulohy zmenil, vola sa update databazy
-                if (newTask.text != task || newTask.priority != priority || newTask.date != date) {
+        // vypise sa vysledok insert query ako toas message
+        if (result == (-1).toLong()) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show()
+            //ukonci aktivitu
+            finish()
+        }
+    }
+    /**
+     * Sukromna metoda pre aktualizovanie ulohy
+     * @param db DatabaseHandler
+     * @param taskTextInput EditText s textom ulohy
+     * @param newPriority nova priorita ulohy
+     * */
+    private fun updateTask(db: DatabaseHandler, taskTextInput: EditText, newPriority: Int) {
+        // instancia novez poznamky, ziskava text z pola pre text na aktivite, prioritu zo zakliknuteho radiobuttonua stary datum
+        // stary datum preto, lebo pri upravovani ulohy nechcem menit jej datum upravy tak ako pri poznamke
+        val newTask = Task(taskTextInput.text.toString(), newPriority, date.toString())
 
-                    //query vracia pocet aktualizovanych zaznamov v DB
-                    val result = db.updateTask(task.toString(), priority, date.toString(), newTask)
+        //ak sa text/priorita/datum ulohy zmenil, vola sa update databazy
+        if (newTask.text != task || newTask.priority != priority || newTask.date != date) {
 
-                    if(result > 0) {
-                        //update query presiel a poznamka sa aktualizovala, dostava sa na predchadzajuci aktivitu
-                        Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                    else {
-                        //update query nepresiel,ostava sa na aktivite
-                        Toast.makeText(this, "Task not updated", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            //query vracia pocet aktualizovanych zaznamov v DB
+            val result = db.updateTask(task.toString(), priority, date.toString(), newTask)
+
+            if(result > 0) {
+                //update query presiel a poznamka sa aktualizovala, dostava sa na predchadzajuci aktivitu
+                Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            else {
+                //update query nepresiel,ostava sa na aktivite
+                Toast.makeText(this, "Task not updated", Toast.LENGTH_SHORT).show()
             }
         } else {
-            //este neboli vyplnene vsetky polia
-            Toast.makeText(this, "FIll in all fields", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
     /**
      * Ziska prioritu ulohy zo zakliknuteho radioButtonu
      * (0, 1, 2) -> (low, meidum, high)
-     * @return priorita ulohy
+     * @return priorita ulohy (0, 1, 2)
      */
     private fun getPriority() : Int{
         return when {
@@ -140,10 +162,10 @@ class AddTaskActivity : AppCompatActivity() {
     }
 
     /**
-     * Metoda vola query pre mazanie zaznamu z DB
+     * Metoda vola query pre mazanie zaznamu z DB pre prave otvorenu ulohu
      */
     private fun tryDeleteTask() {
-        var db = DatabaseHandler(this)
+        val db = DatabaseHandler(this)
 
         // vysledkom query pre zmazanie ulohy je pocet vymazanych zaznamov
         // parametrami pre delete query je stara uloha (jej atributy)
