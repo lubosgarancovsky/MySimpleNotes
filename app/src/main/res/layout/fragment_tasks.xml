@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.TasksFragment"
-    tools:ignore="ExtraText">
+    tools:context=".fragments.TasksFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksRecycler"
@@ -21,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="6"
         tools:listitem="@layout/task_item" />
+
 
     <Button
         android:id="@+id/add_button"

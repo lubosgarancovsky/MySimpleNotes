@@ -122,6 +122,7 @@ class AddTaskActivity : AppCompatActivity() {
      * @param taskTextInput EditText s textom ulohy
      * @param newPriority nova priorita ulohy
      * */
+
     private fun updateTask(db: DatabaseHandler, taskTextInput: EditText, newPriority: Int) {
         // instancia novez poznamky, ziskava text z pola pre text na aktivite, prioritu zo zakliknuteho radiobuttonua stary datum
         // stary datum preto, lebo pri upravovani ulohy nechcem menit jej datum upravy tak ako pri poznamke
@@ -152,6 +153,8 @@ class AddTaskActivity : AppCompatActivity() {
      * (0, 1, 2) -> (low, meidum, high)
      * @return priorita ulohy (0, 1, 2)
      */
+
+
     private fun getPriority() : Int{
         return when {
             findViewById<RadioButton>(R.id.low_priority).isChecked -> 0
